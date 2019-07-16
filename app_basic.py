@@ -10,9 +10,15 @@ app = Flask(__name__)
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-def read_file(route):
+def read_excel_file(route):
     '''This function reads the spreadsheet into a pandas dataframe'''
-    sheet = pd.read_excel(route, sheet_name = 'Lida')
+    sheet = pd.read_excel(route)
+    sheet = sheet.dropna()
+    return sheet
+
+def read_csv_file(route):
+    '''This function reads the spreadsheet into a pandas dataframe'''
+    sheet = pd.read_csv(route)
     sheet = sheet.dropna()
     return sheet
 
@@ -37,6 +43,18 @@ def plot_mean(mean_values):
     plt.title('Exercises Mean')
     plt.savefig('static/Exercises Mean.jpg')
 
+def delete_files():
+    files_list = os.listdir('excel_files/')
+    for i in range(len(files_list)):
+        file = files_list[i]
+        os.remove('excel_files/'+ str(file))
+    print('The folder excel_files has the following files: ', files_list)
+    files_list_img = os.listdir('static/')
+    for i in range(len(files_list_img)):
+        file_img = files_list_img[i]
+        os.remove('static/'+ str(file_img))
+    print('The folder static has the following files: ', files_list_img)
+
 @app.route("/")
 def index():
     return render_template("upload.html")
@@ -60,7 +78,13 @@ def upload():
 
 @app.route('/complete',methods = ['POST'])
 def result():
-    sheet = read_file('excel_files/Transform_20.xlsx')
+    files_list = os.listdir('excel_files/')
+    for i in range(len(files_list)):
+        file = files_list[i]
+        if file.endswith('.csv'):
+            sheet = read_csv_file('excel_files/'+ str(file))
+        elif file.endswith('.xlsx'):
+            sheet = read_excel_file('excel_files/' + str(file))
     columns_list = sheet.columns[1:]
     describe_table = sheet.describe().round(1)
     mean_values = pd.DataFrame(describe_table.loc['mean'])
@@ -72,6 +96,7 @@ def result():
 
 
 if __name__ == "__main__":
-    app.run(port=4555, debug=True)
+    app.run(port = 4555, debug = True)
+    delete_files()
 
     
