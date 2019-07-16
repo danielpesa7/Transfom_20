@@ -44,11 +44,11 @@ def plot_mean(mean_values):
     plt.savefig('static/Exercises Mean.jpg')
 
 def delete_files():
-    files_list = os.listdir('excel_files/')
+    files_list = os.listdir('tmp/')
     for i in range(len(files_list)):
         file = files_list[i]
-        os.remove('excel_files/'+ str(file))
-    print('The folder excel_files has the following files: ', files_list)
+        os.remove('tmp/'+ str(file))
+    print('The folder tmp has the following files: ', files_list)
     files_list_img = os.listdir('static/')
     for i in range(len(files_list_img)):
         file_img = files_list_img[i]
@@ -61,7 +61,7 @@ def index():
 
 @app.route("/upload", methods=['POST'])
 def upload():
-    target = os.path.join(APP_ROOT, 'excel_files/')
+    target = os.path.join(APP_ROOT, 'tmp/')
     print(target)
 
     if not os.path.isdir(target):
@@ -78,13 +78,13 @@ def upload():
 
 @app.route('/complete',methods = ['POST'])
 def result():
-    files_list = os.listdir('excel_files/')
+    files_list = os.listdir('tmp/')
     for i in range(len(files_list)):
         file = files_list[i]
         if file.endswith('.csv'):
-            sheet = read_csv_file('excel_files/'+ str(file))
+            sheet = read_csv_file('tmp/'+ str(file))
         elif file.endswith('.xlsx'):
-            sheet = read_excel_file('excel_files/' + str(file))
+            sheet = read_excel_file('tmp/' + str(file))
     columns_list = sheet.columns[1:]
     describe_table = sheet.describe().round(1)
     mean_values = pd.DataFrame(describe_table.loc['mean'])
