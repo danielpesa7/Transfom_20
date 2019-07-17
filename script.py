@@ -33,7 +33,7 @@ def plot_subplots(sheet_name,columns_list):
         plt.subplots_adjust(hspace = 1, wspace = 1)
         plt.tight_layout()
     #plt.show()
-    plt.savefig('static/Exercises Progress.jpg')
+    plt.savefig('static/Exercises Progress.png')
 
 def plot_mean(mean_values):
     '''This function plot a barplot with the mean of every exercise'''
@@ -43,7 +43,7 @@ def plot_mean(mean_values):
     plt.ylabel('Quantity')
     plt.title('Exercises Mean')
     #plt.show()
-    plt.savefig('static/Exercises Mean.jpg')
+    plt.savefig('static/Exercises Mean.png')
 
 def delete_files():
     files_list = os.listdir('static/')
