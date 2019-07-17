@@ -32,7 +32,6 @@ def plot_subplots(sheet_name,columns_list):
         plt.ylabel('Quantity')
         plt.subplots_adjust(hspace = 1, wspace = 1)
         plt.tight_layout()
-    #plt.show()
     plt.savefig('static/Exercises Progress.png')
 
 def plot_mean(mean_values):
@@ -42,7 +41,6 @@ def plot_mean(mean_values):
     plt.xticks(rotation = 45)
     plt.ylabel('Quantity')
     plt.title('Exercises Mean')
-    #plt.show()
     plt.savefig('static/Exercises Mean.png')
 
 def delete_files():
@@ -81,12 +79,11 @@ def upload():
 @app.route('/complete',methods = ['POST'])
 def result():
     files_list = os.listdir('static/')
-    for i in range(len(files_list)):
-        file = files_list[i]
-        if file.endswith('.csv'):
-            sheet = read_csv_file('static/'+ str(file))
-        elif file.endswith('.xlsx'):
-            sheet = read_excel_file('static/' + str(file))
+    file = files_list[0]
+    if file.endswith('.csv'):
+        sheet = read_csv_file('static/'+ str(file))
+    elif file.endswith('.xlsx'):
+        sheet = read_excel_file('static/' + str(file))
     columns_list = sheet.columns[1:]
     describe_table = sheet.describe().round(1)
     mean_values = pd.DataFrame(describe_table.loc['mean'])
