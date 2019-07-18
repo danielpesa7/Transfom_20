@@ -43,18 +43,6 @@ def plot_mean(mean_values):
     plt.title('Exercises Mean')
     plt.savefig('static/Exercises Mean.png')
 
-def delete_files():
-    files_list = os.listdir('static/')
-    for i in range(len(files_list)):
-        file = files_list[i]
-        os.remove('static/'+ str(file))
-    print('The folder tmp has the following files: ', files_list)
-    files_list_img = os.listdir('static/')
-    for i in range(len(files_list_img)):
-        file_img = files_list_img[i]
-        os.remove('tmp'+ str(file_img))
-    print('The folder static has the following files: ', files_list_img)
-
 @app.route("/")
 def index():
     return render_template("upload.html")
@@ -66,6 +54,14 @@ def upload():
 
     if not os.path.isdir(target):
         os.mkdir(target)
+    
+    files_list = os.listdir('static/')
+    if len(files_list) > 1:
+        filelist = [ f for f in os.listdir('static/') ]
+        for f in filelist:
+            os.remove(os.path.join('static/', f))
+    else:
+        pass
 
     for file in request.files.getlist("file"):
         print(file)
