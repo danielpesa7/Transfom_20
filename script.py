@@ -80,21 +80,30 @@ def upload():
 def result():
     files_list = os.listdir('static/')
     file = files_list[0]
+    print(file)
     if file.endswith('.csv'):
         sheet = read_csv_file('static/'+ str(file))
+        columns_list = sheet.columns[1:]
+        describe_table = sheet.describe().round(1)
+        mean_values = pd.DataFrame(describe_table.loc['mean'])
+        mean_values.sort_values(by = 'mean', inplace = True, ascending = False)
+        plot_subplots(sheet,columns_list)
+        plot_mean(mean_values)
     elif file.endswith('.xlsx'):
         sheet = read_excel_file('static/' + str(file))
-    columns_list = sheet.columns[1:]
-    describe_table = sheet.describe().round(1)
-    mean_values = pd.DataFrame(describe_table.loc['mean'])
-    mean_values.sort_values(by = 'mean', inplace = True, ascending = False)
-    plot_subplots(sheet,columns_list)
-    plot_mean(mean_values)
+        columns_list = sheet.columns[1:]
+        describe_table = sheet.describe().round(1)
+        mean_values = pd.DataFrame(describe_table.loc['mean'])
+        mean_values.sort_values(by = 'mean', inplace = True, ascending = False)
+        plot_subplots(sheet,columns_list)
+        plot_mean(mean_values)
+    else:
+        print('Que extraño prro')
             
     return render_template("images.html")
 
 
 if __name__ == "__main__":
-    app.run(port = 4555, debug = True)
+    app.run(port = 5000, debug = True)
 
     
